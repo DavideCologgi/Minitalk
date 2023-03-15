@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abuonomo <abuonomo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/13 16:52:38 by abuonomo          #+#    #+#             */
-/*   Updated: 2023/03/13 19:05:53 by abuonomo         ###   ########.fr       */
+/*   Created: 2023/03/15 09:02:28 by dcologgi          #+#    #+#             */
+/*   Updated: 2023/03/15 12:19:49 by dcologgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "./ft_printf/ft_printf.h"
+#include <signal.h>
 
 void	ft_handler(int signal, siginfo_t *info, void *context)
 {
@@ -35,20 +32,19 @@ void	ft_handler(int signal, siginfo_t *info, void *context)
 	}
 }
 
-int	main(int argc, char	**argv)
+int	main(int argc, char **argv)
 {
-	int					pid;
 	struct sigaction	act;
+	int					pid;
 
 	(void) argv;
 	if (argc != 1)
 	{
-		ft_printf("Error\n");
-		exit(1);
+		ft_printf("Errore numero parametri in ingresso");
+		exit (1);
 	}
 	pid = getpid();
-	ft_printf("%d", pid);
-	ft_printf("\n");
+	ft_printf("%d\n", pid);
 	act.sa_sigaction = ft_handler;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = 0;

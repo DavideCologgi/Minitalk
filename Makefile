@@ -5,51 +5,46 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dcologgi <dcologgi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/02/24 19:15:40 by abuonomo          #+#    #+#              #
-#    Updated: 2023/03/13 19:12:35 by dcologgi         ###   ########.fr        #
+#    Created: 2023/03/15 11:28:30 by dcologgi          #+#    #+#              #
+#    Updated: 2023/03/15 12:07:14 by dcologgi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+FT_PRINTF = ./ft_printf/libftprintf.a
 
-FT_PRINTF_PATH		=	./ft_printf
-FT_PRINTF			=	$(FT_PRINTF_PATH)/libftprintf.a
+SERVER_SOURCES = server.c
+CLIENT_SOURCES = client.c
 
-SOURCES_FILESS	=	client.c
-SOURCES_FILESC	=	server.c
+SERVER_OBJECTS = ${SERVER_SOURCES:.c=.o}
+CLIENT_OBJECTS = ${CLIENT_SOURCES:.c=.o}
 
-OBJECTSS			= 	$(SOURCES_FILESS:.c=.o)
-OBJECTSC			= 	$(SOURCES_FILESC:.c=.o)
+NAME_SERVER = server
+NAME_CLIENT = client
 
-NAMEC			=	client
-NAMES			=	server
-
-CC				=	gcc
-
-RM				=	rm -f
-
-CFLAGS			=	-Wall -Wextra -Werror
+CC = gcc
+RM = rm -f
+CFLAGS = -Wall -Wextra -Werror
 
 %.o:%.c
-	$(CC) ${CFLAGS}  -c $< -o $@
+	${CC} ${CFLAGS} -c $< -o $@
 
-all:			$(NAMEC) $(NAMES)
+all : ${NAME_SERVER} ${NAME_CLIENT}
 
-$(NAMEC):	$(OBJECTSS) $(FT_PRINTF)
-				$(CC) $(OBJECTSS) $(FT_PRINTF) -o $(NAMEC)
-$(NAMES):	$(OBJECTSC) $(FT_PRINTF)
-				$(CC) $(OBJECTSC) $(FT_PRINTF) -o $(NAMES)
+${NAME_SERVER}: ${SERVER_OBJECTS} ${FT_PRINTF}
+				${CC} ${SERVER_OBJECTS} ${FT_PRINTF} -o ${NAME_SERVER}
 
-$(FT_PRINTF):
-				make -C $(FT_PRINTF_PATH)
+${NAME_CLIENT}: ${CLIENT_OBJECTS} ${FT_PRINTF}
+				${CC} ${CLIENT_OBJECTS} ${FT_PRINTF} -o ${NAME_CLIENT}
 
-clean:
-				${RM} ${OBJECTSS} ${OBJECTSC}
-				make clean -C ${FT_PRINTF_PATH}
+${FT_PRINTF}:
+				make -C ./ft_printf
 
-fclean:			clean
-					rm -f $(NAMEC) $(NAMES)
-					rm -f $(FT_PRINTF)
+clean :
+		${RM} ${SERVER_OBJECTS} ${CLIENT_OBJECTS}
+		make clean -C ./ft_printf
 
-re:				fclean all
+fclean : clean
+		rm -f ${NAME_SERVER} ${NAME_CLIENT}
+		rm -f ${FT_PRINTF}
 
-.PHONY:			all clean re
+re : fclean all
